@@ -1,0 +1,598 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"keycloak:15.1.0"},"fieldPath":"spec.template.spec.containers[?(@.name==\"keycloak\")].image"}]'
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-12-15T14:43:26Z"
+    generation: 3
+    labels:
+      app: keycloak
+      app.kubernetes.io/component: keycloak
+      app.kubernetes.io/instance: keycloak
+    name: keycloak
+    namespace: mrt-local
+    resourceVersion: "127211"
+    uid: 553db97c-8173-473d-8bb3-b4f12e59d951
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        deployment: keycloak
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deployment: keycloak
+      spec:
+        containers:
+        - env:
+          - name: KEYCLOAK_USER
+            valueFrom:
+              configMapKeyRef:
+                key: user
+                name: keycloak-credentials
+          - name: KEYCLOAK_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                key: password
+                name: keycloak-credentials
+          image: quay.io/keycloak/keycloak@sha256:808734aaf403f05fe5dc042af0102383b4155488dae3308dc2fd28280368dc2f
+          imagePullPolicy: IfNotPresent
+          name: keycloak
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2021-12-15T16:02:46Z"
+      lastUpdateTime: "2021-12-15T16:02:46Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2021-12-15T14:43:26Z"
+      lastUpdateTime: "2021-12-15T16:02:46Z"
+      message: ReplicaSet "keycloak-56bf57bd95" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 3
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"mongodb:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"mongodb\")].image"}]'
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-12-15T14:42:43Z"
+    generation: 3
+    labels:
+      app: mongodb
+      app.kubernetes.io/component: mongodb
+      app.kubernetes.io/instance: mongodb
+    name: mongodb
+    namespace: mrt-local
+    resourceVersion: "127266"
+    uid: 04b1697e-2e0e-41d9-8a39-b19e8344f9f6
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        deployment: mongodb
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deployment: mongodb
+      spec:
+        containers:
+        - env:
+          - name: MONGODB_ADMIN_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                key: admin-password
+                name: mongodb-credentials
+          - name: MONGODB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: database
+                name: mongodb-credentials
+          - name: MONGODB_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                key: password
+                name: mongodb-credentials
+          - name: MONGODB_USER
+            valueFrom:
+              configMapKeyRef:
+                key: user
+                name: mongodb-credentials
+          image: registry.access.redhat.com/rhscl/mongodb-36-rhel7@sha256:8dc9932eabd30f2ee4d0b882500c65b48f3c2fbbd85bfd51d0d18410af404a39
+          imagePullPolicy: IfNotPresent
+          name: mongodb
+          ports:
+          - containerPort: 27017
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mongodb/data
+            name: mongodb-volume-1
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: mongodb-volume-1
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2021-12-15T16:02:53Z"
+      lastUpdateTime: "2021-12-15T16:02:53Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2021-12-15T14:42:43Z"
+      lastUpdateTime: "2021-12-15T16:02:53Z"
+      message: ReplicaSet "mongodb-57c7589948" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 3
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "4"
+      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"mrt-backend:v0.1"},"fieldPath":"spec.template.spec.containers[?(@.name==\"mrt-backend\")].image"}]'
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-12-15T15:14:29Z"
+    generation: 10
+    labels:
+      app: mrt-backend
+      app.kubernetes.io/component: mrt-backend
+      app.kubernetes.io/instance: mrt-backend
+    name: mrt-backend
+    namespace: mrt-local
+    resourceVersion: "127109"
+    uid: eb603620-9f7f-474c-bd66-e5d82df0d4d1
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        deployment: mrt-backend
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deployment: mrt-backend
+      spec:
+        containers:
+        - env:
+          - name: AUTH_SECRET
+            valueFrom:
+              configMapKeyRef:
+                key: secret
+                name: auth-server
+          - name: AUTH_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                key: server-url
+                name: auth-server
+          - name: MONGODB_USER
+            valueFrom:
+              configMapKeyRef:
+                key: user
+                name: mongodb-credentials
+          - name: MONGODB_ADMIN_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                key: admin-password
+                name: mongodb-credentials
+          - name: MONGODB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: database
+                name: mongodb-credentials
+          - name: MONGODB_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                key: password
+                name: mongodb-credentials
+          - name: GOOGLE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: google-key
+                name: google-key
+          image: quay.io/vsantoma/mrt-backend@sha256:6c7f809bd4729c4be40e488ae47151d12f7e7ff8a9f808d7b9ff4285afff1e65
+          imagePullPolicy: IfNotPresent
+          name: mrt-backend
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          - containerPort: 8778
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /reports
+            name: volume-tn67r
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: volume-tn67r
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2021-12-15T16:02:26Z"
+      lastUpdateTime: "2021-12-15T16:02:26Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2021-12-15T15:14:29Z"
+      lastUpdateTime: "2021-12-15T16:02:26Z"
+      message: ReplicaSet "mrt-backend-7d4b649697" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 10
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-12-15T14:32:26Z"
+    labels:
+      app: keycloak
+      app.kubernetes.io/component: keycloak
+      app.kubernetes.io/instance: keycloak
+    name: keycloak
+    namespace: mrt-local
+    resourceVersion: "109136"
+    uid: 4f54d057-8a6a-45fe-9b7f-69158e7f3be5
+  spec:
+    clusterIP: 10.217.4.199
+    clusterIPs:
+    - 10.217.4.199
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8443-tcp
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      deployment: keycloak
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-12-15T14:42:43Z"
+    labels:
+      app: mongodb
+      app.kubernetes.io/component: mongodb
+      app.kubernetes.io/instance: mongodb
+    name: mongodb
+    namespace: mrt-local
+    resourceVersion: "111184"
+    uid: cca672a0-2779-4a7c-a96d-0542f2c60040
+  spec:
+    clusterIP: 10.217.4.216
+    clusterIPs:
+    - 10.217.4.216
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 27017-tcp
+      port: 27017
+      protocol: TCP
+      targetPort: 27017
+    selector:
+      deployment: mongodb
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-12-15T15:14:29Z"
+    labels:
+      app: mrt-backend
+      app.kubernetes.io/component: mrt-backend
+      app.kubernetes.io/instance: mrt-backend
+    name: mrt-backend
+    namespace: mrt-local
+    resourceVersion: "117404"
+    uid: 8a056b25-1c50-499d-a62e-ffbbb3db4785
+  spec:
+    clusterIP: 10.217.5.42
+    clusterIPs:
+    - 10.217.5.42
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8443-tcp
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    - name: 8778-tcp
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    selector:
+      deployment: mrt-backend
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    creationTimestamp: "2021-12-15T14:51:18Z"
+    labels:
+      app: keycloak
+      app.kubernetes.io/component: keycloak
+      app.kubernetes.io/instance: keycloak
+    name: keycloak
+    namespace: mrt-local
+    resourceVersion: "112970"
+    uid: 54a85e28-9805-4bda-b0b2-dafbee26f357
+  spec:
+    host: keycloak-mrt.apps-crc.testing
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: keycloak
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-12-15T14:51:18Z"
+        status: "True"
+        type: Admitted
+      host: keycloak-mrt.apps-crc.testing
+      routerCanonicalHostname: router-default.apps-crc.testing
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    creationTimestamp: "2021-12-15T15:28:06Z"
+    labels:
+      app: mrt-backend
+      app.kubernetes.io/component: mrt-backend
+      app.kubernetes.io/instance: mrt-backend
+    name: mrt-backend
+    namespace: mrt-local
+    resourceVersion: "120396"
+    uid: ffd47958-eecd-44d2-a727-2a9c5ec04302
+  spec:
+    host: mrt-backend.apps-crc.testing
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: mrt-backend
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-12-15T15:28:06Z"
+        status: "True"
+        type: Admitted
+      host: mrt-backend.apps-crc.testing
+      routerCanonicalHostname: router-default.apps-crc.testing
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: "2021-12-15T14:32:27Z"
+    creationTimestamp: "2021-12-15T14:32:26Z"
+    generation: 2
+    labels:
+      app: keycloak
+      app.kubernetes.io/component: keycloak
+      app.kubernetes.io/instance: keycloak
+    name: keycloak
+    namespace: mrt-local
+    resourceVersion: "109152"
+    uid: aa98181f-a6b9-4bdf-a0d1-7b2ff470438d
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: quay.io/keycloak/keycloak:15.1.0
+      from:
+        kind: DockerImage
+        name: quay.io/keycloak/keycloak:15.1.0
+      generation: 2
+      importPolicy: {}
+      name: 15.1.0
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/mrt-local/keycloak
+    publicDockerImageRepository: default-route-openshift-image-registry.apps-crc.testing/mrt-local/keycloak
+    tags:
+    - items:
+      - created: "2021-12-15T14:32:27Z"
+        dockerImageReference: quay.io/keycloak/keycloak@sha256:808734aaf403f05fe5dc042af0102383b4155488dae3308dc2fd28280368dc2f
+        generation: 2
+        image: sha256:808734aaf403f05fe5dc042af0102383b4155488dae3308dc2fd28280368dc2f
+      tag: 15.1.0
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: "2021-12-15T14:42:43Z"
+    creationTimestamp: "2021-12-15T14:42:43Z"
+    generation: 2
+    labels:
+      app: mongodb
+      app.kubernetes.io/component: mongodb
+      app.kubernetes.io/instance: mongodb
+    name: mongodb
+    namespace: mrt-local
+    resourceVersion: "111206"
+    uid: c8a4e33f-958b-4e61-b760-aad29fed4ef5
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: registry.access.redhat.com/rhscl/mongodb-36-rhel7:latest
+      from:
+        kind: DockerImage
+        name: registry.access.redhat.com/rhscl/mongodb-36-rhel7:latest
+      generation: 2
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/mrt-local/mongodb
+    publicDockerImageRepository: default-route-openshift-image-registry.apps-crc.testing/mrt-local/mongodb
+    tags:
+    - items:
+      - created: "2021-12-15T14:42:43Z"
+        dockerImageReference: registry.access.redhat.com/rhscl/mongodb-36-rhel7@sha256:8dc9932eabd30f2ee4d0b882500c65b48f3c2fbbd85bfd51d0d18410af404a39
+        generation: 2
+        image: sha256:8dc9932eabd30f2ee4d0b882500c65b48f3c2fbbd85bfd51d0d18410af404a39
+      tag: latest
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: "2021-12-15T15:14:29Z"
+    creationTimestamp: "2021-12-15T15:14:29Z"
+    generation: 2
+    labels:
+      app: mrt-backend
+      app.kubernetes.io/component: mrt-backend
+      app.kubernetes.io/instance: mrt-backend
+    name: mrt-backend
+    namespace: mrt-local
+    resourceVersion: "117419"
+    uid: 7622ba55-793e-4414-8fe6-dfe7299188b3
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: quay.io/vsantoma/mrt-backend:v0.1
+      from:
+        kind: DockerImage
+        name: quay.io/vsantoma/mrt-backend:v0.1
+      generation: 2
+      importPolicy: {}
+      name: v0.1
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/mrt-local/mrt-backend
+    publicDockerImageRepository: default-route-openshift-image-registry.apps-crc.testing/mrt-local/mrt-backend
+    tags:
+    - items:
+      - created: "2021-12-15T15:14:29Z"
+        dockerImageReference: quay.io/vsantoma/mrt-backend@sha256:6c7f809bd4729c4be40e488ae47151d12f7e7ff8a9f808d7b9ff4285afff1e65
+        generation: 2
+        image: sha256:6c7f809bd4729c4be40e488ae47151d12f7e7ff8a9f808d7b9ff4285afff1e65
+      tag: v0.1
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

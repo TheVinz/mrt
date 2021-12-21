@@ -1,0 +1,41 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    secret: qx31H64NZMwGxhp4d6b7YI7GVBG41Lmt
+    server-url: http://keycloak-mrt.apps-crc.testing/auth/realms/mrt-local
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: "2021-12-15T15:07:21Z"
+    name: auth-server
+    namespace: mrt-local
+    resourceVersion: "121217"
+    uid: ffe82a47-7631-4d8d-b64c-48dab65d6081
+- apiVersion: v1
+  data:
+    password: admin
+    user: admin
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: "2021-12-15T14:54:45Z"
+    name: keycloak-credentials
+    namespace: mrt-local
+    resourceVersion: "113632"
+    uid: 1fd2a685-ef7b-431c-9f5e-7e1733c84496
+- apiVersion: v1
+  data:
+    admin-password: pa55word
+    database: mrt
+    password: password
+    user: user
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: "2021-12-15T14:35:44Z"
+    name: mongodb-credentials
+    namespace: mrt-local
+    resourceVersion: "109786"
+    uid: 4c7368a0-518e-4b30-baeb-07dbf26a9661
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
